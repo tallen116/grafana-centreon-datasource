@@ -2,7 +2,7 @@
   "$schema": "https://raw.githubusercontent.com/grafana/grafana/master/docs/sources/developers/plugins/plugin.schema.json",
   "type": "datasource",
   "name": "centreon-grafana-plugin",
-  "id": "tallen-116-centreon-grafana-plugin",
+  "id": "tallen116-centreon-grafana-plugin",
   "metrics": true,
   "info": {
     "description": "Centreon plugin for Grafana",
