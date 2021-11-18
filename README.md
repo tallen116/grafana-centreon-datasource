@@ -1,6 +1,6 @@
 # Grafana Data Source Plugin Template
 
-[![Build](https://github.com/grafana/grafana-starter-datasource/workflows/CI/badge.svg)](https://github.com/grafana/grafana-starter-datasource/actions?query=workflow%3A%22CI%22)
+[![CI](https://github.com/tallen116/grafana-centreon-datasource/actions/workflows/ci.yaml/badge.svg?branch=main)](https://github.com/tallen116/grafana-centreon-datasource/actions/workflows/ci.yaml)
 
 This template is a starting point for building Grafana Data Source Plugins
 
