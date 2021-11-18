@@ -190,7 +190,11 @@ export const MetricSelectComponent = props => {
   const onChange = value => {
     setInputValue('');
     setValue(value);
-    props.onChange({ ...props.query, metricId: parseInt(value.value), metricSelection: value });
+    props.onChange({
+      ...props.query,
+      metricId: parseInt(value.value),
+      metricSelection: value,
+    });
     props.onRunQuery();
   };
 
