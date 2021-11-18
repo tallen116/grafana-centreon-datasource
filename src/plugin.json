@@ -1,0 +1,59 @@
+{
+  "$schema": "https://raw.githubusercontent.com/grafana/grafana/master/docs/sources/developers/plugins/plugin.schema.json",
+  "type": "datasource",
+  "name": "centreon-grafana-plugin",
+  "id": "tallen-116-centreon-grafana-plugin",
+  "metrics": true,
+  "info": {
+    "description": "Centreon plugin for Grafana",
+    "author": {
+      "name": "Timothy Allen",
+      "url": ""
+    },
+    "keywords": [
+      "centreon",
+      "nagios"
+    ],
+    "logos": {
+      "small": "img/logo.svg",
+      "large": "img/logo.svg"
+    },
+    "links": [
+      {
+        "name": "Website",
+        "url": "https://github.com/grafana/grafana-starter-datasource"
+      },
+      {
+        "name": "License",
+        "url": "https://github.com/grafana/grafana-starter-datasource/blob/master/LICENSE"
+      }
+    ],
+    "screenshots": [],
+    "version": "%VERSION%",
+    "updated": "%TODAY%"
+  },
+  "dependencies": {
+    "grafanaDependency": ">=7.0.0",
+    "plugins": []
+  },
+  "routes": [
+    {
+      "path": "centreonlogin",
+      "url": "{{ .JsonData.httpUrl }}",
+      "headers": [
+        {
+          "name": "Content-Type",
+          "content": "application/json"
+        }
+      ],
+      "body": {
+        "security": {
+          "credentials": {
+            "login": "{{ .JsonData.apiUsername }}",
+            "password": "{{ .SecureJsonData.apiPassword }}"
+          }
+        }
+      }
+    }
+  ]
+}
