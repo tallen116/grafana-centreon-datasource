@@ -1,5 +1,5 @@
 {
-  "name": "tallen-116-centreon-grafana-plugin",
+  "name": "tallen116-centreon-grafana-plugin",
   "version": "0.2.0",
   "description": "Centreon datasource plugin for Grafana",
   "scripts": {
