@@ -54,6 +54,16 @@
           }
         }
       }
+    },
+    {
+      "path": "centreonrequest",
+      "url": "{{ .JsonData.httpUrl }}",
+      "headers": [
+        {
+          "name": "Content-Type",
+          "content": "application/json"
+        }
+      ]
     }
   ]
 }
