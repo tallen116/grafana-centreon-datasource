@@ -214,7 +214,8 @@ export class DataSource extends DataSourceApi<MyQuery, MyDataSourceOptions> {
 
     const query = {
       url:
-        this.directUrl +
+        this.proxyUrl +
+        '/centreonrequest' +
         '/centreon/api/v2.1' +
         '/monitoring/hosts/' +
         hostId +
@@ -238,7 +239,7 @@ export class DataSource extends DataSourceApi<MyQuery, MyDataSourceOptions> {
     const searchfilter = '{"host.name": {"$lk": "%' + filter + '%"}}';
 
     const query = {
-      url: this.directUrl + '/centreon/api/v2.1' + '/monitoring/hosts',
+      url: this.proxyUrl + '/centreonrequest' + '/centreon/api/v2.1' + '/monitoring/hosts',
       method: 'GET',
       params: {
         search: searchfilter,
@@ -256,7 +257,7 @@ export class DataSource extends DataSourceApi<MyQuery, MyDataSourceOptions> {
     const searchfilter = '{"service.display_name": {"$lk": "%' + filter + '%"}}';
 
     const query = {
-      url: this.directUrl + '/centreon/api/v2.1' + '/monitoring/hosts/' + hostId + '/services',
+      url: this.proxyUrl + '/centreonrequest' + '/centreon/api/v2.1' + '/monitoring/hosts/' + hostId + '/services',
       method: 'GET',
       params: {
         search: searchfilter,
