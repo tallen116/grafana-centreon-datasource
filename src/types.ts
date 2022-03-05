@@ -1,6 +1,7 @@
 import { DataQuery, DataSourceJsonData, SelectableValue } from '@grafana/data';
 
 export interface MyQuery extends DataQuery {
+  queryType: string;
   hostId: number;
   serviceId: number;
   metricId: number;
@@ -12,6 +13,7 @@ export interface MyQuery extends DataQuery {
 
 export const defaultQuery: Partial<MyQuery> = {
   isPrestine: true,
+  queryType: 'select_id',
 };
 
 /**

@@ -12,12 +12,26 @@ import {
   ServiceSelectComponent,
   MetricSelectComponent,
 } from './components/MetricQueryEditor';
+import { SelectValue } from '@grafana/ui/components/Select/types';
 
 const { FormField } = LegacyForms;
 
 type Props = QueryEditorProps<DataSource, MyQuery, MyDataSourceOptions>;
 
+const mainDropDownOptions = [
+  { value: 'select', label: 'Select' },
+  { value: 'select_id', label: 'Select Id' },
+];
+
 export class QueryEditor extends PureComponent<Props> {
+  onQuerySelectChange = (event: SelectableValue<string>) => {
+    const { onChange, query, onRunQuery } = this.props;
+    console.log('Props queryType: ' + query.queryType);
+    console.log('Query Type: ' + JSON.stringify(event));
+    onChange({ ...query, queryType: event.value });
+    onRunQuery();
+  };
+
   onHostIdChange = (event: ChangeEvent<HTMLInputElement>) => {
     const { onChange, query, onRunQuery } = this.props;
     onChange({ ...query, hostId: parseInt(event.target.value) });
@@ -42,44 +56,51 @@ export class QueryEditor extends PureComponent<Props> {
   // https://developers.grafana.com/ui/latest/index.html?path=/docs/forms-select--basic-select-async
   render() {
     const query = defaults(this.props.query, defaultQuery);
-    const { hostId, serviceId, metricId, datasource } = query;
+    const { hostId, serviceId, metricId, datasource, queryType } = query;
 
     return (
       <div>
-        <InlineFieldRow style={{ width: '100%' }}>
-          <InlineField label="Host ID">
-            <Input value={hostId} onChange={this.onHostIdChange} label="Host ID" type="number" step="1" />
-          </InlineField>
-          <FormField
-            width={4}
-            value={serviceId}
-            onChange={this.onServiceIdChange}
-            label="Service ID"
-            type="number"
-            step="1"
-          />
-          <FormField
-            width={4}
-            value={metricId}
-            onChange={this.onMetricIdChange}
-            label="Metric ID"
-            type="number"
-            step="1"
-          />
+        <InlineFieldRow>
+          <Select options={mainDropDownOptions} value={queryType} onChange={this.onQuerySelectChange} />
         </InlineFieldRow>
-        <InlineFieldRow style={{ width: '100%' }}>
-          <InlineField label="Host" grow>
-            <HostSelectComponent {...this.props} />
-          </InlineField>
-        </InlineFieldRow>
-        {this.props.query.hostId && (
+        {this.props.query.queryType === 'select_id' && (
+          <InlineFieldRow style={{ width: '100%' }}>
+            <InlineField label="Host ID">
+              <Input value={hostId} onChange={this.onHostIdChange} label="Host ID" type="number" step="1" />
+            </InlineField>
+            <FormField
+              width={4}
+              value={serviceId}
+              onChange={this.onServiceIdChange}
+              label="Service ID"
+              type="number"
+              step="1"
+            />
+            <FormField
+              width={4}
+              value={metricId}
+              onChange={this.onMetricIdChange}
+              label="Metric ID"
+              type="number"
+              step="1"
+            />
+          </InlineFieldRow>
+        )}
+        {this.props.query.queryType === 'select' && (
+          <InlineFieldRow style={{ width: '100%' }}>
+            <InlineField label="Host" grow>
+              <HostSelectComponent {...this.props} />
+            </InlineField>
+          </InlineFieldRow>
+        )}
+        {this.props.query.hostId && this.props.query.queryType === 'select' && (
           <InlineFieldRow>
             <InlineField label="Service" grow>
               <ServiceSelectComponent {...this.props} />
             </InlineField>
           </InlineFieldRow>
         )}
-        {this.props.query.serviceId && (
+        {this.props.query.serviceId && this.props.query.queryType === 'select' && (
           <InlineFieldRow>
             <InlineField label="Metric" grow>
               <MetricSelectComponent {...this.props} />
