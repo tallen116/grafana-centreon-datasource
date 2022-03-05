@@ -19,7 +19,7 @@ const { FormField } = LegacyForms;
 type Props = QueryEditorProps<DataSource, MyQuery, MyDataSourceOptions>;
 
 const mainDropDownOptions = [
-  { value: 'select', label: 'Select' },
+  { value: 'metric', label: 'Metric' },
   { value: 'select_id', label: 'Select Id' },
 ];
 
@@ -86,21 +86,21 @@ export class QueryEditor extends PureComponent<Props> {
             />
           </InlineFieldRow>
         )}
-        {this.props.query.queryType === 'select' && (
+        {this.props.query.queryType === 'metric' && (
           <InlineFieldRow style={{ width: '100%' }}>
             <InlineField label="Host" grow>
               <HostSelectComponent {...this.props} />
             </InlineField>
           </InlineFieldRow>
         )}
-        {this.props.query.hostId && this.props.query.queryType === 'select' && (
+        {this.props.query.queryType === 'metric' && this.props.query.hostId && (
           <InlineFieldRow>
             <InlineField label="Service" grow>
               <ServiceSelectComponent {...this.props} />
             </InlineField>
           </InlineFieldRow>
         )}
-        {this.props.query.serviceId && this.props.query.queryType === 'select' && (
+        {this.props.query.queryType === 'metric' && this.props.query.serviceId && (
           <InlineFieldRow>
             <InlineField label="Metric" grow>
               <MetricSelectComponent {...this.props} />
