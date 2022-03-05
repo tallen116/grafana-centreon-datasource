@@ -39,11 +39,11 @@ Grafana supports a wide range of data sources, including Prometheus, MySQL, and 
 Setup Grafana docker image
 
 ```
-docker run -d -p 3000:3000 -v "$(pwd)"/grafana-plugins:/var/lib/grafana/plugins --name=grafana grafana/grafana:latest
+git clone git@github.com:tallen116/grafana-centreon-datasource.git
 
-cd grafana-plugins
+cd grafana-centreon-datasource
 
-git clone <this repo>
+docker run -d -p 3000:3000 -v "$(cd ..; pwd)/grafana-centreon-datasource:/var/lib/grafana/plugins/grafana-centreon-datasource" --name=grafana-dev --env GF_DEFAULT_APP_MODE=development grafana/grafana:latest
 ```
 
 ## Learn more
