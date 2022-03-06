@@ -18,13 +18,13 @@ const { FormField } = LegacyForms;
 
 type Props = QueryEditorProps<DataSource, MyQuery, MyDataSourceOptions>;
 
-const mainDropDownOptions = [
+const queryTypeOptions = [
   { value: 'metric', label: 'Metric' },
   { value: 'select_id', label: 'Select Id' },
 ];
 
 export class QueryEditor extends PureComponent<Props> {
-  onQuerySelectChange = (event: SelectableValue<string>) => {
+  onQueryTypeChange = (event: SelectableValue<string>) => {
     const { onChange, query, onRunQuery } = this.props;
     console.log('Props queryType: ' + query.queryType);
     console.log('Query Type: ' + JSON.stringify(event));
@@ -61,7 +61,9 @@ export class QueryEditor extends PureComponent<Props> {
     return (
       <div>
         <InlineFieldRow>
-          <Select options={mainDropDownOptions} value={queryType} onChange={this.onQuerySelectChange} />
+          <InlineField label="Query Type">
+            <Select options={queryTypeOptions} value={queryType} onChange={this.onQueryTypeChange} />
+          </InlineField>
         </InlineFieldRow>
         {this.props.query.queryType === 'select_id' && (
           <InlineFieldRow style={{ width: '100%' }}>
