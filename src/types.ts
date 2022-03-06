@@ -23,6 +23,7 @@ export interface MyDataSourceOptions extends DataSourceJsonData {
   httpUrl?: string;
   apiUsername: string;
   validateCerts?: boolean;
+  apiVersion: string;
 }
 
 /**

@@ -10,11 +10,20 @@ interface Props extends DataSourcePluginOptionsEditorProps<MyDataSourceOptions, 
 interface State {}
 
 export class ConfigEditor extends PureComponent<Props, State> {
-  onURLChange = (event: ChangeEvent<HTMLInputElement>) => {
+  onUrlChange = (event: ChangeEvent<HTMLInputElement>) => {
     const { onOptionsChange, options } = this.props;
     const jsonData = {
       ...options.jsonData,
       httpUrl: event.target.value,
+    };
+    onOptionsChange({ ...options, jsonData });
+  };
+
+  onApiVersionChange = (event: ChangeEvent<HTMLInputElement>) => {
+    const { onOptionsChange, options } = this.props;
+    const jsonData = {
+      ...options.jsonData,
+      apiVersion: event.target.value,
     };
     onOptionsChange({ ...options, jsonData });
   };
@@ -28,7 +37,7 @@ export class ConfigEditor extends PureComponent<Props, State> {
     onOptionsChange({ ...options, jsonData });
   };
 
-  onAPIPasswordChange = (event: ChangeEvent<HTMLInputElement>) => {
+  onApiPasswordChange = (event: ChangeEvent<HTMLInputElement>) => {
     const { onOptionsChange, options } = this.props;
     onOptionsChange({
       ...options,
@@ -74,9 +83,20 @@ export class ConfigEditor extends PureComponent<Props, State> {
             label="URL"
             labelWidth={6}
             inputWidth={20}
-            onChange={this.onURLChange}
+            onChange={this.onUrlChange}
             value={jsonData.httpUrl || ''}
             placeholder="URL of Centreon central server"
+          />
+        </div>
+
+        <div className="gf-form">
+          <FormField
+            label="API version"
+            labelWidth={6}
+            inputWidth={20}
+            onChange={this.onApiVersionChange}
+            value={jsonData.apiVersion || ''}
+            placeholder="URL of Centreon API endpoint"
           />
         </div>
 
@@ -101,7 +121,7 @@ export class ConfigEditor extends PureComponent<Props, State> {
               labelWidth={6}
               inputWidth={20}
               onReset={this.onResetAPIPassword}
-              onChange={this.onAPIPasswordChange}
+              onChange={this.onApiPasswordChange}
             />
           </div>
         </div>
