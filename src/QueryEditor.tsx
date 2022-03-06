@@ -1,18 +1,12 @@
 import defaults from 'lodash/defaults';
 
-import React, { ChangeEvent, PureComponent, useState } from 'react';
-import { LegacyForms, Field, InlineField, Input, AsyncSelect, Select, InlineFieldRow } from '@grafana/ui';
+import React, { ChangeEvent, PureComponent } from 'react';
+import { LegacyForms, InlineField, Input, Select, InlineFieldRow } from '@grafana/ui';
 import { QueryEditorProps, SelectableValue } from '@grafana/data';
 import { DataSource } from './datasource';
 import { defaultQuery, MyDataSourceOptions, MyQuery } from './types';
 import { parseInt } from 'lodash';
-import {
-  SelectComponent,
-  HostSelectComponent,
-  ServiceSelectComponent,
-  MetricSelectComponent,
-} from './components/MetricQueryEditor';
-import { SelectValue } from '@grafana/ui/components/Select/types';
+import { HostSelectComponent, ServiceSelectComponent, MetricSelectComponent } from './components/MetricQueryEditor';
 
 const { FormField } = LegacyForms;
 
