@@ -62,15 +62,6 @@ export class ConfigEditor extends PureComponent<Props, State> {
     });
   };
 
-  onResolutionChange = (event: ChangeEvent<HTMLInputElement>) => {
-    const { onOptionsChange, options } = this.props;
-    const jsonData = {
-      ...options.jsonData,
-      resolution: parseFloat(event.target.value),
-    };
-    onOptionsChange({ ...options, jsonData });
-  };
-
   render() {
     const { options } = this.props;
     const { jsonData, secureJsonFields } = options;
