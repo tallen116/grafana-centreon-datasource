@@ -21,6 +21,7 @@ const localStorageKey = 'centreon-token';
 export class DataSource extends DataSourceApi<MyQuery, MyDataSourceOptions> {
   proxyUrl?: string;
   directUrl?: string;
+  apiVersion?: string;
   localStorageKey: string;
   tokenRefresh = false;
   tokenPromise: Promise<any>;
@@ -30,6 +31,7 @@ export class DataSource extends DataSourceApi<MyQuery, MyDataSourceOptions> {
 
     this.proxyUrl = instanceSettings.url;
     this.directUrl = instanceSettings.jsonData.httpUrl;
+    this.apiVersion = instanceSettings.jsonData.apiVersion;
 
     this.localStorageKey = `${instanceSettings.id}-${localStorageKey}`;
 
@@ -104,7 +106,7 @@ export class DataSource extends DataSourceApi<MyQuery, MyDataSourceOptions> {
     try {
       const result = await getBackendSrv().datasourceRequest({
         method: 'POST',
-        url: this.proxyUrl + '/centreonlogin' + '/centreon/api/v2.1/login',
+        url: this.proxyUrl + '/centreonlogin' + '/centreon/api/' + this.apiVersion + '/login',
       });
 
       // Stop refresh token var
@@ -216,7 +218,8 @@ export class DataSource extends DataSourceApi<MyQuery, MyDataSourceOptions> {
       url:
         this.proxyUrl +
         '/centreonrequest' +
-        '/centreon/api/v2.1' +
+        '/centreon/api/' +
+        this.apiVersion +
         '/monitoring/hosts/' +
         hostId +
         '/services/' +
@@ -239,7 +242,7 @@ export class DataSource extends DataSourceApi<MyQuery, MyDataSourceOptions> {
     const searchfilter = '{"host.name": {"$lk": "%' + filter + '%"}}';
 
     const query = {
-      url: this.proxyUrl + '/centreonrequest' + '/centreon/api/v2.1' + '/monitoring/hosts',
+      url: this.proxyUrl + '/centreonrequest' + '/centreon/api/' + this.apiVersion + '/monitoring/hosts',
       method: 'GET',
       params: {
         search: searchfilter,
@@ -257,7 +260,14 @@ export class DataSource extends DataSourceApi<MyQuery, MyDataSourceOptions> {
     const searchfilter = '{"service.display_name": {"$lk": "%' + filter + '%"}}';
 
     const query = {
-      url: this.proxyUrl + '/centreonrequest' + '/centreon/api/v2.1' + '/monitoring/hosts/' + hostId + '/services',
+      url:
+        this.proxyUrl +
+        '/centreonrequest' +
+        '/centreon/api/' +
+        this.apiVersion +
+        '/monitoring/hosts/' +
+        hostId +
+        '/services',
       method: 'GET',
       params: {
         search: searchfilter,
