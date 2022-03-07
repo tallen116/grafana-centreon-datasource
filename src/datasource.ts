@@ -1,6 +1,6 @@
 import defaults from 'lodash/defaults';
 
-import { getBackendSrv } from '@grafana/runtime';
+import { getBackendSrv, getTemplateSrv } from '@grafana/runtime';
 
 import {
   DataQueryRequest,
@@ -12,7 +12,7 @@ import {
   dateTimeFormatISO,
 } from '@grafana/data';
 
-import { MyQuery, MyDataSourceOptions, defaultQuery } from './types';
+import { MyQuery, MyDataSourceOptions, defaultQuery, MyVariableQuery } from './types';
 //import Options from '@grafana/ui/slate-plugins/slate-prism/options';
 import _, { parseInt } from 'lodash';
 
@@ -45,6 +45,7 @@ export class DataSource extends DataSourceApi<MyQuery, MyDataSourceOptions> {
 
   async query(options: DataQueryRequest<MyQuery>): Promise<DataQueryResponse> {
     console.log('Query running: ' + options.requestId);
+    //console.log('Template Vars: ' + JSON.stringify(getTemplateSrv().getVariables()));
 
     const { range } = options;
 
@@ -55,9 +56,14 @@ export class DataSource extends DataSourceApi<MyQuery, MyDataSourceOptions> {
     //const promises = options.targets.map(query =>
     const promises = _.filter(options.targets, query => {
       return query.hide !== true;
-    }).map(query =>
+    }).map(query => {
       //this.doRequest(query).then(response => {
-      this.getMetrics(query.hostId, query.serviceId, from, to).then(response => {
+
+      let host = getTemplateSrv().replace('"$host"', options.scopedVars);
+      if (host === '$host') {
+        host = query.hostId.toString();
+      }
+      return this.getMetrics(parseInt(host), query.serviceId, from, to).then(response => {
         let metricIndex = -1;
         for (let i = 0; i < response.data.metrics.length; i++) {
           if (parseInt(response.data.metrics[i].metric_id) === query.metricId) {
@@ -88,8 +94,8 @@ export class DataSource extends DataSourceApi<MyQuery, MyDataSourceOptions> {
         }
 
         return frame;
-      })
-    );
+      });
+    });
 
     //return { data };
     return Promise.all(promises).then(data => ({ data }));
@@ -147,6 +153,17 @@ export class DataSource extends DataSourceApi<MyQuery, MyDataSourceOptions> {
         };
       }
     }
+  }
+
+  async metricFindQuery(query: MyVariableQuery, options?: any) {
+    console.log('VariableQuery: ' + JSON.stringify(query));
+    const response = await this.getHosts(query.host);
+
+    console.log(response);
+
+    const values = response.data.result.map(frame => ({ text: frame.display_name, value: frame.id }));
+
+    return values;
   }
 
   async newTokenPromise() {

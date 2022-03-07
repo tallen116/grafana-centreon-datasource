@@ -16,6 +16,13 @@ export const defaultQuery: Partial<MyQuery> = {
   queryType: 'metric',
 };
 
+export interface MyVariableQuery {
+  host: string;
+  group: string;
+  category: string;
+  rawQuery: string;
+}
+
 /**
  * These are options configured for each DataSource instance
  */
