@@ -7,14 +7,20 @@ import { DataSource } from './datasource';
 import { defaultQuery, MyDataSourceOptions, MyQuery } from './types';
 import { parseInt } from 'lodash';
 import { HostSelectComponent, ServiceSelectComponent, MetricSelectComponent } from './components/MetricQueryEditor';
+import * as c from './constants';
 
 const { FormField } = LegacyForms;
 
 type Props = QueryEditorProps<DataSource, MyQuery, MyDataSourceOptions>;
 
 const queryTypeOptions = [
-  { value: 'metric', label: 'Metric' },
-  { value: 'select_id', label: 'Select Id' },
+  { value: c.MODE_METRIC, label: 'Metric' },
+  { value: c.MODE_ID, label: 'Select Id' },
+];
+
+const groupTypeOptions = [
+  { value: c.CENTREON_GROUP_HOST, label: 'Group' },
+  { value: c.CENTREON_GROUP_SERVICE, label: 'Host' },
 ];
 
 export class QueryEditor extends PureComponent<Props> {
@@ -59,7 +65,7 @@ export class QueryEditor extends PureComponent<Props> {
             <Select options={queryTypeOptions} value={queryType} onChange={this.onQueryTypeChange} />
           </InlineField>
         </InlineFieldRow>
-        {this.props.query.queryType === 'select_id' && (
+        {this.props.query.queryType === c.MODE_ID && (
           <InlineFieldRow style={{ width: '100%' }}>
             <InlineField label="Host ID">
               <Input value={hostId} onChange={this.onHostIdChange} label="Host ID" type="number" step="1" />
@@ -82,21 +88,21 @@ export class QueryEditor extends PureComponent<Props> {
             />
           </InlineFieldRow>
         )}
-        {this.props.query.queryType === 'metric' && (
+        {this.props.query.queryType === c.MODE_METRIC && (
           <InlineFieldRow style={{ width: '100%' }}>
             <InlineField label="Host" grow>
               <HostSelectComponent {...this.props} />
             </InlineField>
           </InlineFieldRow>
         )}
-        {this.props.query.queryType === 'metric' && this.props.query.hostId && (
+        {this.props.query.queryType === c.MODE_METRIC && this.props.query.hostId && (
           <InlineFieldRow>
             <InlineField label="Service" grow>
               <ServiceSelectComponent {...this.props} />
             </InlineField>
           </InlineFieldRow>
         )}
-        {this.props.query.queryType === 'metric' && this.props.query.serviceId && (
+        {this.props.query.queryType === c.MODE_METRIC && this.props.query.serviceId && (
           <InlineFieldRow>
             <InlineField label="Metric" grow>
               <MetricSelectComponent {...this.props} />
