@@ -251,6 +251,13 @@ export class DataSource extends DataSourceApi<MyQuery, MyDataSourceOptions> {
     return this.queryAllHosts(searchfilter);
   }
 
+  async getHostsByRegex(filter = '') {
+    // Sample {"host.name": {"$rg":"^.*$"}}
+    const searchFilter = '{"host.name": {"$rg":"' + filter + '"}}'
+
+    return this.queryAllHosts(searchFilter)
+  }
+
   async getServiceByHosts(hostId: number, filter = '') {
     // Sample {"service.display_name": {"$lk": "%%"}}
     const searchfilter = '{"service.display_name": {"$lk": "%' + filter + '%"}}';
