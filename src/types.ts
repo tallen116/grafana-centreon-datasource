@@ -1,4 +1,5 @@
 import { DataQuery, DataSourceJsonData, SelectableValue } from '@grafana/data';
+import * as c from './constants';
 
 export interface MyQuery extends DataQuery {
   queryType: string;
@@ -13,7 +14,7 @@ export interface MyQuery extends DataQuery {
 
 export const defaultQuery: Partial<MyQuery> = {
   isPrestine: true,
-  queryType: 'metric',
+  queryType: c.MODE_METRIC,
 };
 
 /**
