@@ -25,6 +25,7 @@ export class DataSource extends DataSourceApi<MyQuery, MyDataSourceOptions> {
   localStorageKey: string;
   tokenRefresh = false;
   tokenPromise: Promise<any>;
+  centreonApiUri: string;
 
   constructor(instanceSettings: DataSourceInstanceSettings<MyDataSourceOptions>) {
     super(instanceSettings);
@@ -39,6 +40,7 @@ export class DataSource extends DataSourceApi<MyQuery, MyDataSourceOptions> {
     //  resolve('void');
     //});
     this.tokenPromise = this.newTokenPromise();
+    this.centreonApiUri = this.proxyUrl + '/centreonrequest' + '/centreon/api/' + this.apiVersion;
 
     console.log('Datasource is initiated');
   }
@@ -106,7 +108,7 @@ export class DataSource extends DataSourceApi<MyQuery, MyDataSourceOptions> {
     try {
       const result = await getBackendSrv().datasourceRequest({
         method: 'POST',
-        url: this.proxyUrl + '/centreonlogin' + '/centreon/api/' + this.apiVersion + '/login',
+        url: this.centreonApiUri + '/login',
       });
 
       // Stop refresh token var
@@ -215,16 +217,7 @@ export class DataSource extends DataSourceApi<MyQuery, MyDataSourceOptions> {
     }
 
     const query = {
-      url:
-        this.proxyUrl +
-        '/centreonrequest' +
-        '/centreon/api/' +
-        this.apiVersion +
-        '/monitoring/hosts/' +
-        hostId +
-        '/services/' +
-        serviceId +
-        '/metrics/performance',
+      url: this.centreonApiUri + '/monitoring/hosts/' + hostId + '/services/' + serviceId + '/metrics/performance',
       method: 'GET',
       params: {
         start: start,
@@ -242,7 +235,7 @@ export class DataSource extends DataSourceApi<MyQuery, MyDataSourceOptions> {
     const searchfilter = '{"host.name": {"$lk": "%' + filter + '%"}}';
 
     const query = {
-      url: this.proxyUrl + '/centreonrequest' + '/centreon/api/' + this.apiVersion + '/monitoring/hosts',
+      url: this.centreonApiUri + '/monitoring/hosts',
       method: 'GET',
       params: {
         search: searchfilter,
@@ -260,14 +253,7 @@ export class DataSource extends DataSourceApi<MyQuery, MyDataSourceOptions> {
     const searchfilter = '{"service.display_name": {"$lk": "%' + filter + '%"}}';
 
     const query = {
-      url:
-        this.proxyUrl +
-        '/centreonrequest' +
-        '/centreon/api/' +
-        this.apiVersion +
-        '/monitoring/hosts/' +
-        hostId +
-        '/services',
+      url: this.centreonApiUri + '/monitoring/hosts/' + hostId + '/services',
       method: 'GET',
       params: {
         search: searchfilter,
