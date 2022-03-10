@@ -230,10 +230,7 @@ export class DataSource extends DataSourceApi<MyQuery, MyDataSourceOptions> {
     return result;
   }
 
-  async getHosts(filter = '') {
-    // Sample {"host.name": {"$lk": "%%"}}
-    const searchfilter = '{"host.name": {"$lk": "%' + filter + '%"}}';
-
+  async queryAllHosts(searchfilter = '') {
     const query = {
       url: this.centreonApiUri + '/monitoring/hosts',
       method: 'GET',
@@ -246,6 +243,12 @@ export class DataSource extends DataSourceApi<MyQuery, MyDataSourceOptions> {
 
     //console.log(result);
     return result;
+  }
+
+  async getHosts(filter = '') {
+    const searchfilter = '{"host.name": {"$lk": "%' + filter + '%"}}';
+
+    return this.queryAllHosts(searchfilter);
   }
 
   async getServiceByHosts(hostId: number, filter = '') {
