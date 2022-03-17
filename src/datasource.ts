@@ -108,7 +108,7 @@ export class DataSource extends DataSourceApi<MyQuery, MyDataSourceOptions> {
     try {
       const result = await getBackendSrv().datasourceRequest({
         method: 'POST',
-        url: this.centreonApiUri + '/login',
+        url: this.proxyUrl + '/centreonlogin' + '/centreon/api/' + this.apiVersion + '/login',
       });
 
       // Stop refresh token var
@@ -253,9 +253,18 @@ export class DataSource extends DataSourceApi<MyQuery, MyDataSourceOptions> {
 
   async getHostsByRegex(filter = '') {
     // Sample {"host.name": {"$rg":"^.*$"}}
-    const searchFilter = '{"host.name": {"$rg":"' + filter + '"}}'
+    const searchFilter = '{"host.name": {"$rg":"' + filter + '"}}';
 
-    return this.queryAllHosts(searchFilter)
+    return this.queryAllHosts(searchFilter);
+  }
+
+  async getHostById(id: number) {
+    const query = {
+      url: this.centreonApiUri + '/monitoring/hosts/' + id.toString(),
+      method: 'GET',
+    };
+
+    return this.doRequest(query);
   }
 
   async getServiceByHosts(hostId: number, filter = '') {
@@ -273,5 +282,14 @@ export class DataSource extends DataSourceApi<MyQuery, MyDataSourceOptions> {
     const result = this.doRequest(query);
 
     return result;
+  }
+
+  async getServiceById(hostId: number, serviceId: number) {
+    const query = {
+      url: this.centreonApiUri + '/monitoring/hosts/' + hostId.toString() + '/services/' + serviceId.toString(),
+      method: 'GET',
+    };
+
+    return this.doRequest(query);
   }
 }
