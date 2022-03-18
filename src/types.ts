@@ -6,6 +6,29 @@ export interface MyQuery extends DataQuery {
   hostId: number;
   serviceId: number;
   metricId: number;
+
+  group: {
+    name: string;
+    id: number;
+    type: string;
+    regex: boolean;
+  };
+  host: {
+    name: string;
+    id: number;
+    regex: boolean;
+  };
+  service: {
+    name: string;
+    id: number;
+    regex: boolean;
+  };
+  metric: {
+    name: string;
+    id: number;
+    regex: boolean;
+  };
+
   hostSelection: SelectableValue;
   serviceSelection: SelectableValue;
   metricSelection: SelectableValue;
@@ -15,6 +38,21 @@ export interface MyQuery extends DataQuery {
 export const defaultQuery: Partial<MyQuery> = {
   isPrestine: true,
   queryType: c.MODE_METRIC,
+  host: {
+    name: '',
+    id: -1,
+    regex: false,
+  },
+  service: {
+    name: '',
+    id: -1,
+    regex: false,
+  },
+  metric: {
+    name: '',
+    id: -1,
+    regex: false,
+  },
 };
 
 /**

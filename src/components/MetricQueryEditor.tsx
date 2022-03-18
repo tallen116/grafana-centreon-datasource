@@ -1,4 +1,4 @@
-import { AsyncSelect, Select } from '@grafana/ui';
+import { AsyncSelect, Select, Input } from '@grafana/ui';
 import { SelectableValue } from '@grafana/data';
 import React, { useState, useEffect, useCallback } from 'react';
 import { defaultQuery } from '../types';
@@ -59,6 +59,12 @@ export const HostSelectComponent = props => {
   const onChange = value => {
     setInputValue('');
     setHostValue(value);
+
+    console.log('Host onChange value');
+    console.log(value);
+
+    const host = props.query.host;
+
     props.onChange({
       ...props.query,
       hostId: parseInt(value.value),
@@ -68,20 +74,46 @@ export const HostSelectComponent = props => {
       serviceId: null,
       metricId: undefined,
       isPrestine: false,
+      host: {
+        name: value.label,
+        id: parseInt(value.value),
+        regex: host.regex,
+      },
     });
     props.onRunQuery();
   };
 
-  return (
-    <AsyncSelect
-      loadOptions={loadAsyncHosts}
-      defaultOptions
-      value={props.query.hostSelection || hostValue}
-      onChange={onChange}
-      onInputChange={onInputChange}
-      inputValue={inputValue}
-    />
-  );
+  const onRegexChange = value => {
+    console.log('host onregex change');
+    console.log(value.target.value);
+
+    const host = props.query.host;
+
+    props.onChange({
+      ...props.query,
+      host: {
+        name: value.target.value,
+        id: -1,
+        regex: host.regex,
+      },
+    });
+  };
+
+  // Return basic input if regex is enabled
+  if (props.query.host.regex) {
+    return <Input value={props.query.host.name || ''} onChange={onRegexChange} placeholder=".*" />;
+  } else {
+    return (
+      <AsyncSelect
+        loadOptions={loadAsyncHosts}
+        defaultOptions
+        value={props.query.hostSelection || hostValue}
+        onChange={onChange}
+        onInputChange={onInputChange}
+        inputValue={inputValue}
+      />
+    );
+  }
 };
 
 export const ServiceSelectComponent = props => {

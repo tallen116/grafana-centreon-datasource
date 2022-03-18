@@ -1,7 +1,7 @@
 import defaults from 'lodash/defaults';
 
 import React, { ChangeEvent, PureComponent } from 'react';
-import { LegacyForms, InlineField, Input, Select, InlineFieldRow } from '@grafana/ui';
+import { LegacyForms, InlineField, Input, Select, InlineFieldRow, InlineSwitch } from '@grafana/ui';
 import { QueryEditorProps, SelectableValue } from '@grafana/data';
 import { DataSource } from './datasource';
 import { defaultQuery, MyDataSourceOptions, MyQuery } from './types';
@@ -53,10 +53,34 @@ export class QueryEditor extends PureComponent<Props> {
     onRunQuery();
   };
 
+  onHostRegexChange = (event: ChangeEvent<HTMLInputElement>) => {
+    //console.log(event);
+    const { onChange, query, onRunQuery } = this.props;
+    const host = query.host;
+    onChange({ ...query, host: { name: host.name, id: host.id, regex: event.target.checked } });
+    onRunQuery();
+  };
+
+  onServiceRegexChange = (event: ChangeEvent<HTMLInputElement>) => {
+    //console.log(event);
+    const { onChange, query, onRunQuery } = this.props;
+    const service = query.service;
+    onChange({ ...query, service: { name: service.name, id: service.id, regex: event.target.checked } });
+    onRunQuery();
+  };
+
+  onMetricRegexChange = (event: ChangeEvent<HTMLInputElement>) => {
+    //console.log(event);
+    const { onChange, query, onRunQuery } = this.props;
+    const metric = query.metric;
+    onChange({ ...query, metric: { name: metric.name, id: metric.id, regex: event.target.checked } });
+    onRunQuery();
+  };
+
   // https://developers.grafana.com/ui/latest/index.html?path=/docs/forms-select--basic-select-async
   render() {
     const query = defaults(this.props.query, defaultQuery);
-    const { hostId, serviceId, metricId, datasource, queryType } = query;
+    const { hostId, serviceId, metricId, datasource, queryType, host, service, metric } = query;
 
     return (
       <div>
@@ -93,6 +117,11 @@ export class QueryEditor extends PureComponent<Props> {
             <InlineField label="Host" grow>
               <HostSelectComponent {...this.props} />
             </InlineField>
+            <InlineField>
+              <InlineField label="Regex">
+                <InlineSwitch value={host.regex} onChange={this.onHostRegexChange} />
+              </InlineField>
+            </InlineField>
           </InlineFieldRow>
         )}
         {this.props.query.queryType === c.MODE_METRIC && this.props.query.hostId && (
@@ -100,12 +129,22 @@ export class QueryEditor extends PureComponent<Props> {
             <InlineField label="Service" grow>
               <ServiceSelectComponent {...this.props} />
             </InlineField>
+            <InlineField>
+              <InlineField label="Regex">
+                <InlineSwitch value={service.regex} onChange={this.onServiceRegexChange} />
+              </InlineField>
+            </InlineField>
           </InlineFieldRow>
         )}
         {this.props.query.queryType === c.MODE_METRIC && this.props.query.serviceId && (
           <InlineFieldRow>
             <InlineField label="Metric" grow>
               <MetricSelectComponent {...this.props} />
+            </InlineField>
+            <InlineField>
+              <InlineField label="Regex">
+                <InlineSwitch value={metric.regex} onChange={this.onMetricRegexChange} />
+              </InlineField>
             </InlineField>
           </InlineFieldRow>
         )}
