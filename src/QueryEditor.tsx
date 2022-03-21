@@ -56,31 +56,28 @@ export class QueryEditor extends PureComponent<Props> {
   onHostRegexChange = (event: ChangeEvent<HTMLInputElement>) => {
     //console.log(event);
     const { onChange, query, onRunQuery } = this.props;
-    const host = query.host;
-    onChange({ ...query, host: { name: host.name, id: host.id, regex: event.target.checked } });
+    onChange({ ...query, host_regex: event.target.checked });
     onRunQuery();
   };
 
   onServiceRegexChange = (event: ChangeEvent<HTMLInputElement>) => {
     //console.log(event);
     const { onChange, query, onRunQuery } = this.props;
-    const service = query.service;
-    onChange({ ...query, service: { name: service.name, id: service.id, regex: event.target.checked } });
+    onChange({ ...query, service_regex: event.target.checked });
     onRunQuery();
   };
 
   onMetricRegexChange = (event: ChangeEvent<HTMLInputElement>) => {
     //console.log(event);
     const { onChange, query, onRunQuery } = this.props;
-    const metric = query.metric;
-    onChange({ ...query, metric: { name: metric.name, id: metric.id, regex: event.target.checked } });
+    onChange({ ...query, metric_regex: event.target.checked });
     onRunQuery();
   };
 
   // https://developers.grafana.com/ui/latest/index.html?path=/docs/forms-select--basic-select-async
   render() {
     const query = defaults(this.props.query, defaultQuery);
-    const { hostId, serviceId, metricId, datasource, queryType, host, service, metric } = query;
+    const { hostId, serviceId, metricId, datasource, queryType, host_regex, service_regex, metric_regex } = query;
 
     return (
       <div>
@@ -119,7 +116,7 @@ export class QueryEditor extends PureComponent<Props> {
             </InlineField>
             <InlineField>
               <InlineField label="Regex">
-                <InlineSwitch value={host.regex} onChange={this.onHostRegexChange} />
+                <InlineSwitch value={host_regex} onChange={this.onHostRegexChange} />
               </InlineField>
             </InlineField>
           </InlineFieldRow>
@@ -131,7 +128,7 @@ export class QueryEditor extends PureComponent<Props> {
             </InlineField>
             <InlineField>
               <InlineField label="Regex">
-                <InlineSwitch value={service.regex} onChange={this.onServiceRegexChange} />
+                <InlineSwitch value={service_regex} onChange={this.onServiceRegexChange} />
               </InlineField>
             </InlineField>
           </InlineFieldRow>
@@ -143,7 +140,7 @@ export class QueryEditor extends PureComponent<Props> {
             </InlineField>
             <InlineField>
               <InlineField label="Regex">
-                <InlineSwitch value={metric.regex} onChange={this.onMetricRegexChange} />
+                <InlineSwitch value={metric_regex} onChange={this.onMetricRegexChange} />
               </InlineField>
             </InlineField>
           </InlineFieldRow>

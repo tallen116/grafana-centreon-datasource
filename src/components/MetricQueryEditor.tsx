@@ -80,7 +80,6 @@ export const HostSelectComponent = props => {
       host: {
         name: value.label,
         id: parseInt(value.value),
-        regex: host.regex,
       },
     });
     props.onRunQuery();
@@ -97,13 +96,12 @@ export const HostSelectComponent = props => {
       host: {
         name: value.target.value,
         id: -1,
-        regex: host.regex,
       },
     });
   };
 
   // Return basic input if regex is enabled
-  if (props.query.host.regex) {
+  if (props.query.host_regex) {
     return <Input value={props.query.host.name || ''} onChange={onRegexChange} placeholder=".*" />;
   } else {
     return (
@@ -173,6 +171,10 @@ export const ServiceSelectComponent = props => {
         serviceSelection: value,
         metricSelection: undefined,
         metricId: undefined,
+        service: {
+          name: value.label,
+          id: parseInt(value.value),
+        },
       });
       props.onRunQuery();
     },
@@ -195,12 +197,11 @@ export const ServiceSelectComponent = props => {
       service: {
         name: value.target.value,
         id: -1,
-        regex: service.regex,
       },
     });
   };
 
-  if (props.query.service.regex) {
+  if (props.query.service_regex) {
     return <Input value={props.query.service.name || ''} onChange={onRegexChange} placeholder=".*" />;
   } else {
     return (
@@ -249,6 +250,10 @@ export const MetricSelectComponent = props => {
       ...props.query,
       metricId: parseInt(value.value),
       metricSelection: value,
+      metric: {
+        name: value.label,
+        id: parseInt(value.value),
+      },
     });
     props.onRunQuery();
   };
@@ -271,18 +276,37 @@ export const MetricSelectComponent = props => {
     setValue(props.query.metricSelection ? props.query.metricSelection : { label: PLACEHOLDER_TEXT });
   }, [props.query.metricSelection]);
 
-  return (
-    // key value is a hack workaround to reloading options
-    <AsyncSelect
-      key={JSON.stringify(props.query.serviceSelection)}
-      loadOptions={loadAsyncHosts}
-      defaultOptions
-      value={value}
-      onChange={onChangeCallback}
-      onInputChange={onInputChange}
-      inputValue={inputValue}
-    />
-  );
+  const onRegexChange = value => {
+    console.log('metric onregex change');
+    console.log(value.target.value);
+
+    const metric = props.query.metric;
+
+    props.onChange({
+      ...props.query,
+      metric: {
+        name: value.target.value,
+        id: -1,
+      },
+    });
+  };
+
+  if (props.query.metric_regex) {
+    return <Input value={props.query.metric.name || ''} onChange={onRegexChange} placeholder=".*" />;
+  } else {
+    return (
+      // key value is a hack workaround to reloading options
+      <AsyncSelect
+        key={JSON.stringify(props.query.serviceSelection)}
+        loadOptions={loadAsyncHosts}
+        defaultOptions
+        value={value}
+        onChange={onChangeCallback}
+        onInputChange={onInputChange}
+        inputValue={inputValue}
+      />
+    );
+  }
 };
 
 function parseHosts(payload: object): Array<SelectableValue<string>> {

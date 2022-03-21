@@ -16,18 +16,18 @@ export interface MyQuery extends DataQuery {
   host: {
     name: string;
     id: number;
-    regex: boolean;
   };
+  host_regex: boolean;
   service: {
     name: string;
     id: number;
-    regex: boolean;
   };
+  service_regex: boolean;
   metric: {
     name: string;
     id: number;
-    regex: boolean;
   };
+  metric_regex: boolean;
 
   hostSelection: SelectableValue;
   serviceSelection: SelectableValue;
@@ -41,18 +41,18 @@ export const defaultQuery: Partial<MyQuery> = {
   host: {
     name: '',
     id: -1,
-    regex: false,
   },
+  host_regex: false,
   service: {
     name: '',
     id: -1,
-    regex: false,
   },
+  service_regex: false,
   metric: {
     name: '',
     id: -1,
-    regex: false,
   },
+  metric_regex: false,
 };
 
 /**
