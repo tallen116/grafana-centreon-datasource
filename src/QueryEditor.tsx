@@ -121,7 +121,7 @@ export class QueryEditor extends PureComponent<Props> {
             </InlineField>
           </InlineFieldRow>
         )}
-        {this.props.query.queryType === c.MODE_METRIC && this.props.query.hostId && (
+        {this.props.query.queryType === c.MODE_METRIC && this.props.query.host.name && (
           <InlineFieldRow>
             <InlineField label="Service" grow>
               <ServiceSelectComponent {...this.props} />
@@ -133,7 +133,7 @@ export class QueryEditor extends PureComponent<Props> {
             </InlineField>
           </InlineFieldRow>
         )}
-        {this.props.query.queryType === c.MODE_METRIC && this.props.query.serviceId && (
+        {this.props.query.queryType === c.MODE_METRIC && this.props.query.service.name && (
           <InlineFieldRow>
             <InlineField label="Metric" grow>
               <MetricSelectComponent {...this.props} />

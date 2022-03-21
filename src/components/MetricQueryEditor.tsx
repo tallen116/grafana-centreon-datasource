@@ -126,7 +126,6 @@ export const ServiceSelectComponent = props => {
 
   let listItems: SelectableValue[] = [];
 
-  //Promise<SelectableValue<T>[]>
   const loadAsyncHosts = () => {
     console.log('Service Value: ' + inputValue);
     return datasource.getServiceByHosts(props.query.hostId, inputValue).then(response => {
@@ -136,7 +135,7 @@ export const ServiceSelectComponent = props => {
 
   const loadSelectItems = useCallback(() => {
     console.log(props);
-    return datasource.getServiceByHosts(props.query.hostId, inputValue).then(response => {
+    return datasource.getServiceByHosts(props.query.host.id, inputValue).then(response => {
       return parseServices(response);
     });
   }, [props, inputValue, datasource]);
@@ -232,7 +231,7 @@ export const MetricSelectComponent = props => {
   //Promise<SelectableValue<T>[]>
   const loadAsyncHosts = () => {
     console.log('Metric Input: ' + inputValue);
-    return datasource.getMetrics(props.query.hostId, props.query.serviceId).then(response => {
+    return datasource.getMetrics(props.query.host.id, props.query.service.id).then(response => {
       return parseMetrics(response);
     });
   };
@@ -250,10 +249,6 @@ export const MetricSelectComponent = props => {
       ...props.query,
       metricId: parseInt(value.value),
       metricSelection: value,
-      metric: {
-        name: value.label,
-        id: parseInt(value.value),
-      },
     });
     props.onRunQuery();
   };
@@ -265,6 +260,10 @@ export const MetricSelectComponent = props => {
         ...props.query,
         metricSelection: value,
         metricId: parseInt(value.value),
+        metric: {
+          name: value.label,
+          id: parseInt(value.value),
+        },
       });
       props.onRunQuery();
     },
@@ -279,8 +278,6 @@ export const MetricSelectComponent = props => {
   const onRegexChange = value => {
     console.log('metric onregex change');
     console.log(value.target.value);
-
-    const metric = props.query.metric;
 
     props.onChange({
       ...props.query,
