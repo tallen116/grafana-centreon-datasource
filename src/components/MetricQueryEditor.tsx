@@ -39,10 +39,13 @@ export const HostSelectComponent = props => {
   const query = defaults(props, defaultQuery);
   const { datasource, onRunQuery } = query;
 
-  const [hostValue, setHostValue] = useState<SelectableValue<string>>();
+  const [hostValue, setHostValue] = useState({
+    label: props.query.host.name,
+    value: props.query.host.id,
+    description: '',
+  });
   const [inputValue, setInputValue] = useState('');
 
-  //Promise<SelectableValue<T>[]>
   const loadAsyncHosts = () => {
     console.log('Host Value: ' + inputValue);
     return datasource.getHosts(inputValue || '').then(response => {
@@ -107,7 +110,7 @@ export const HostSelectComponent = props => {
       <AsyncSelect
         loadOptions={loadAsyncHosts}
         defaultOptions
-        value={props.query.hostSelection || hostValue}
+        value={hostValue}
         onChange={onChange}
         onInputChange={onInputChange}
         inputValue={inputValue}
