@@ -184,21 +184,41 @@ export const ServiceSelectComponent = props => {
     setServiceValue(props.query.serviceSelection ? props.query.serviceSelection : { label: PLACEHOLDER_TEXT });
   }, [props.query.serviceSelection]);
 
-  return (
-    // key value is a hack workaround to reloading options
-    <AsyncSelect
-      key={JSON.stringify(props.query.hostSelection)}
-      loadOptions={loadSelectItems}
-      defaultOptions
-      isMulti={false}
-      filterOption={() => true}
-      value={serviceValue || null}
-      onChange={onChangeCallback}
-      onInputChange={onInputChange}
-      inputValue={inputValue}
-      placeholder={PLACEHOLDER_TEXT}
-    />
-  );
+  const onRegexChange = value => {
+    console.log('service onregex change');
+    console.log(value.target.value);
+
+    const service = props.query.service;
+
+    props.onChange({
+      ...props.query,
+      service: {
+        name: value.target.value,
+        id: -1,
+        regex: service.regex,
+      },
+    });
+  };
+
+  if (props.query.service.regex) {
+    return <Input value={props.query.service.name || ''} onChange={onRegexChange} placeholder=".*" />;
+  } else {
+    return (
+      // key value is a hack workaround to reloading options
+      <AsyncSelect
+        key={JSON.stringify(props.query.hostSelection)}
+        loadOptions={loadSelectItems}
+        defaultOptions
+        isMulti={false}
+        filterOption={() => true}
+        value={serviceValue || null}
+        onChange={onChangeCallback}
+        onInputChange={onInputChange}
+        inputValue={inputValue}
+        placeholder={PLACEHOLDER_TEXT}
+      />
+    );
+  }
 };
 
 export const MetricSelectComponent = props => {
